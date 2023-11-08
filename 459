@@ -1,0 +1,48 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int vis[26] = {0};
+vector<int> adj[26];
+void dfs(int v){
+    for(auto u: adj[v]){
+        if(!vis[u]){
+            vis[u]=1;
+            dfs(u);
+        }
+    }
+}
+int main() {
+    int n, x, y, maior, cont;
+    string v;
+    cin>>n;
+    cin.ignore();
+    for(int i=0; i<n; i++){
+        if(i) cout<<endl;
+        cont=0;
+        getline(cin, v);
+        while(v=="\0"){
+            getline(cin, v);
+        }
+        maior=v[0]-'A';
+        //cout<<"maior "<<maior<<endl;
+        getline(cin, v);
+        while(v!="\0"){
+           // cout << v << endl;
+            adj[v[0]-'A'].push_back(v[1]-'A');
+            adj[v[1]-'A'].push_back(v[0]-'A');
+            getline(cin, v); 
+        }
+        for(int y=0; y<=maior; y++){
+            if(!vis[y]){
+                vis[y]=1;
+                dfs(y);
+                cont++;
+            }
+        }
+        for(int x=0; x<26; x++){
+            adj[x].clear();
+            vis[x] = 0;
+        }
+        cout<<cont<<endl;
+    }
+}
