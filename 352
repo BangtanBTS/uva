@@ -1,0 +1,51 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+vector<vector<int>> M = {
+  {1, 1, 0, 0, 0},
+  {1, 1, 0, 0, 0},
+  {0, 0, 0, 0, 0},
+  {0, 1, 1, 1, 0},
+  {1, 0, 0, 0, 1}
+};
+vector<vector<int>> marcados(5, vector<int>(5, 0));
+/*
+  lista de coisas que espalha precisa fazer:
+  1. marcar o cara de agr
+  2. andar para os caras proximos aos caras de agr (vizinhos do cara de agr)
+    2.1 descobrir quais caras sao vizinhos do cara de agr
+*/
+vector<pair<int, int>> movimentos = {
+  {0, 1}, {0, -1}, {-1, 0}, {1, 0}, // DECB
+  {-1, -1}, {1, 1}, {1, -1}, {-1, 1}// Diagonais
+};
+bool dentro(int a, int b) {
+  return (a >= 0 && a < 5 && b >= 0 && b < 5);
+}
+void espalha(int linha, int coluna) {
+  marcados[linha][coluna] = 1;
+  for(int i = 0; i < 8; i++) {
+    //int dl, dc; tie(dl, dc) = movimentos[i];
+    pair<int, int> atual = movimentos[i];
+    int dl = atual.first;
+    int dc = atual.second;
+    if(dentro(linha + dl, coluna + dc) && marcados[linha + dl][coluna + dc] == 0
+      && M[linha + dl][coluna + dc] == 1
+    ) {
+      espalha(linha + dl, coluna + dc);
+    }
+  }
+}
+int main() {
+  int grupos = 0;
+  for(int i = 0; i < 5; i++) {
+    for(int j = 0; j < 5; j++) {
+      if(M[i][j] == 1 && marcados[i][j] == 0) {
+        espalha(i, j);
+        grupos++;
+      }
+    }
+  }
+
+  cout << grupos << '\n';
+}
